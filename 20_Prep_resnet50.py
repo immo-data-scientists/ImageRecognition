@@ -9,9 +9,7 @@ Adapted from code contributed by BigMoyan.
 '''
 from __future__ import print_function
 
-
 import warnings
-
 import keras.backend as K
 
 from keras.layers import Input
@@ -27,20 +25,22 @@ from keras.layers import AveragePooling2D
 from keras.layers import GlobalAveragePooling2D
 from keras.layers import BatchNormalization
 from keras.models import Model
-
 from keras.utils import layer_utils
 from keras.utils.data_utils import get_file
-#from keras.applications.imagenet_utils import decode_predictions
-#from keras.applications.imagenet_utils import preprocess_input
 from keras_applications.imagenet_utils import _obtain_input_shape
 from keras.engine.topology import get_source_inputs
 from os.path import join
+from os.path import dirname
 
 # Data Path
-data_path = 'T:/Projects/AI'
-WEIGHTS_PATH = join(data_path,'ImageRecognition/resnet50_weights_tf_dim_ordering_tf_kernels.h5')
-WEIGHTS_PATH_NO_TOP = join(data_path, 'ImageRecognition/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
+projHome = "T:/AI-Product/ImageRecognition"
+
+file_weights = 'resnet50_weights_tf_dim_ordering_tf_kernels.h5'
+file_weights_notop = 'resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
+
+WEIGHTS_PATH = join(projHome, file_weights)
+WEIGHTS_PATH_NO_TOP = join(projHome, file_weights_notop)
 
 def identity_block(input_tensor, kernel_size, filters, stage, block):
     """The identity block is the block that has no conv layer at shortcut.
@@ -290,4 +290,4 @@ def ResNet50(include_top=True, weights='imagenet',
 
 # Final model
 model = ResNet50(weights='imagenet')
-model.save(join(data_path, '_Models/model_image_classifier_resnet50.hdf5'))
+model.save(join(dirname(projHome), '_Service/ServiceImage_resnet50.hdf5'))
