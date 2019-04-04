@@ -12,7 +12,7 @@ import numpy as np
 
 model = Xception(weights='imagenet')
 
-img_path = 'ball.jfif'
+img_path = 'lion.jfif'
 img = image.load_img(img_path, target_size=(299, 299))
 x = image.img_to_array(img)
 x = np.expand_dims(x, axis=0)

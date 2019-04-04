@@ -36,8 +36,8 @@ from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.preprocessing import image
 
 
-WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.5/inception_v3_weights_tf_dim_ordering_tf_kernels.h5'
-WEIGHTS_PATH_NO_TOP = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.5/inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
+WEIGHTS_PATH = '10_inception_v3_weights_tf_dim_ordering_tf_kernels.h5'
+WEIGHTS_PATH_NO_TOP = '11_inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
 
 
 def conv2d_bn(x,

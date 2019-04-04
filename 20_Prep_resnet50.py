@@ -9,8 +9,10 @@ Adapted from code contributed by BigMoyan.
 '''
 from __future__ import print_function
 
-import numpy as np
+
 import warnings
+
+import keras.backend as K
 
 from keras.layers import Input
 from keras import layers
@@ -25,18 +27,19 @@ from keras.layers import AveragePooling2D
 from keras.layers import GlobalAveragePooling2D
 from keras.layers import BatchNormalization
 from keras.models import Model
-from keras.preprocessing import image
-import keras.backend as K
+
 from keras.utils import layer_utils
 from keras.utils.data_utils import get_file
-from keras.applications.imagenet_utils import decode_predictions
-from keras.applications.imagenet_utils import preprocess_input
+#from keras.applications.imagenet_utils import decode_predictions
+#from keras.applications.imagenet_utils import preprocess_input
 from keras_applications.imagenet_utils import _obtain_input_shape
 from keras.engine.topology import get_source_inputs
+from os.path import join
 
-
-WEIGHTS_PATH = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels.h5'
-WEIGHTS_PATH_NO_TOP = 'https://github.com/fchollet/deep-learning-models/releases/download/v0.2/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5'
+# Data Path
+data_path = 'T:/Projects/AI'
+WEIGHTS_PATH = join(data_path,'ImageRecognition/resnet50_weights_tf_dim_ordering_tf_kernels.h5')
+WEIGHTS_PATH_NO_TOP = join(data_path, 'ImageRecognition/resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5')
 
 
 def identity_block(input_tensor, kernel_size, filters, stage, block):
@@ -285,15 +288,6 @@ def ResNet50(include_top=True, weights='imagenet',
     return model
 
 
-if __name__ == '__main__':
-    model = ResNet50(include_top=True, weights='imagenet')
-
-    img_path = 'elephant.jpg'
-    img = image.load_img(img_path, target_size=(224, 224))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    print('Input image shape:', x.shape)
-
-    preds = model.predict(x)
-    print('Predicted:', decode_predictions(preds))
+# Final model
+model = ResNet50(weights='imagenet')
+model.save(join(data_path, '_Models/model_image_classifier_resnet50.hdf5'))
