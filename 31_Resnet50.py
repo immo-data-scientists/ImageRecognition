@@ -11,19 +11,17 @@ from keras.models import load_model
 from keras.preprocessing import image
 from imagenet_utils import preprocess_input, decode_predictions
 import numpy as np
-from PIL import Image
 
 # Meta information
 suffix = '_resnet50'
 Service = 'ServiceImage'
-ProjHome = 'K:/AI-Product/_Service'
+ProjHome = 'T:/AI-Product/_Service'
 ImagePath = join(dirname(ProjHome), 'zz_sampledata')
 
 model = load_model(join(ProjHome, Service + suffix + '.hdf5'))
 
 # load and prepare image
 img = image.load_img(join(ImagePath, 'elephant.jpg'), target_size=(224, 224))
-image = Image.open(img)
 
 img.show()
 x = image.img_to_array(img)
@@ -32,4 +30,4 @@ x = preprocess_input(x)
 
 # Make predictions
 preds = model.predict(x)
-print('Predicted:', decode_predictions(preds) )
+print('Predicted:', decode_predictions(preds))
