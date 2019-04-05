@@ -1,11 +1,14 @@
-import numpy as np
 import json
 
-from keras.utils.data_utils import get_file
 from keras import backend as K
+from os.path import join
+
+projHome = "T:/AI-Product/ImageRecognition"
+
+file_class_index = 'imagenet_class_index.json'
 
 CLASS_INDEX = None
-CLASS_INDEX_PATH = 'https://s3.amazonaws.com/deep-learning-models/image-models/imagenet_class_index.json'
+CLASS_INDEX_PATH = join(projHome, file_class_index)
 
 
 def preprocess_input(x, dim_ordering='default'):
@@ -36,13 +39,10 @@ def decode_predictions(preds, top=5):
                          '(i.e. a 2D array of shape (samples, 1000)). '
                          'Found array with shape: ' + str(preds.shape))
     if CLASS_INDEX is None:
-        fpath = get_file('imagenet_class_index.json',
-                         CLASS_INDEX_PATH,
-                         cache_subdir='models')
-        CLASS_INDEX = json.load(open(fpath))
-    results = []
+        CLASS_INDEX = json.load(open(CLASS_INDEX_PATH))
+#   
     for pred in preds:
         top_indices = pred.argsort()[-top:][::-1]
-        result = [tuple(CLASS_INDEX[str(i)]) + (pred[i],) for i in top_indices]
-        results.append(result)
-    return results
+        for i in top_indices:
+            print(CLASS_INDEX[str(i)][1:], ":", pred[i])
+
