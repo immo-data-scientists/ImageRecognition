@@ -258,12 +258,14 @@ def ResNet50(include_top=True, weights='imagenet',
         if include_top:
             weights_path = get_file('resnet50_weights_tf_dim_ordering_tf_kernels.h5',
                                     WEIGHTS_PATH,
-                                    cache_subdir='models',
+#                                    cache_subdir='models',
+                                    cache_subdir=dirname(WEIGHTS_PATH),
                                     md5_hash='a7b3fe01876f51b976af0dea6bc144eb')
         else:
             weights_path = get_file('resnet50_weights_tf_dim_ordering_tf_kernels_notop.h5',
                                     WEIGHTS_PATH_NO_TOP,
-                                    cache_subdir='models',
+#                                    cache_subdir='models',
+                                    cache_subdir=dirname(WEIGHTS_PATH_NO_TOP),
                                     md5_hash='a268eb855778b3df3c7506639542a6af')
         model.load_weights(weights_path)
         if K.backend() == 'theano':
