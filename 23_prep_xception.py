@@ -19,12 +19,7 @@ due to its reliance on `SeparableConvolution` layers.
 '''
 from __future__ import print_function
 from __future__ import absolute_import
-
 import warnings
-import numpy as np
-
-from keras.preprocessing import image
-
 from keras.models import Model
 from keras import layers
 from keras.layers import Dense
@@ -39,13 +34,19 @@ from keras.layers import GlobalMaxPooling2D
 from keras.engine.topology import get_source_inputs
 from keras.utils.data_utils import get_file
 from keras import backend as K
-from keras.applications.imagenet_utils import decode_predictions
 from keras.applications.imagenet_utils import _obtain_input_shape
+from os.path import join
+from os.path import dirname
 
+# Data Path
 
-TF_WEIGHTS_PATH = '18_xception_weights_tf_dim_ordering_tf_kernels.h5'
-TF_WEIGHTS_PATH_NO_TOP = '19_xception_weights_tf_dim_ordering_tf_kernels_notop.h5'
+projHome = "T:/AI-Product/ImageRecognition"
 
+file_weights = 'xception_weights_tf_dim_ordering_tf_kernels.h5'
+file_weights_notop = 'xception_weights_tf_dim_ordering_tf_kernels_notop.h5'
+
+WEIGHTS_PATH = join(projHome, file_weights)
+WEIGHTS_PATH_NO_TOP = join(projHome, file_weights_notop)
 
 def Xception(include_top=True, weights='imagenet',
              input_tensor=None, input_shape=None,
@@ -249,12 +250,14 @@ def Xception(include_top=True, weights='imagenet',
     if weights == 'imagenet':
         if include_top:
             weights_path = get_file('xception_weights_tf_dim_ordering_tf_kernels.h5',
-                                    TF_WEIGHTS_PATH,
-                                    cache_subdir='models')
+                                    WEIGHTS_PATH,
+                                    cache_subdir=dirname(WEIGHTS_PATH))
+
         else:
             weights_path = get_file('xception_weights_tf_dim_ordering_tf_kernels_notop.h5',
-                                    TF_WEIGHTS_PATH_NO_TOP,
-                                    cache_subdir='models')
+                                    WEIGHTS_PATH_NO_TOP,
+                                    cache_subdir=dirname(WEIGHTS_PATH_NO_TOP))
+
         model.load_weights(weights_path)
 
     if old_data_format:
@@ -268,17 +271,7 @@ def preprocess_input(x):
     x *= 2.
     return x
 
+# Final model
+model = Xception(weights='imagenet')
+model.save(join(dirname(projHome), '_Service/ServiceImage_Xception.hdf5'))
 
-if __name__ == '__main__':
-    model = Xception(include_top=True, weights='imagenet')
-
-    img_path = 'elephant.jpg'
-    img = image.load_img(img_path, target_size=(299, 299))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    print('Input image shape:', x.shape)
-
-    preds = model.predict(x)
-    print(np.argmax(preds))
-    print('Predicted:', decode_predictions(preds, 1))

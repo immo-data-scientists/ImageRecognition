@@ -5,18 +5,30 @@ Created on Wed Apr  3 17:26:08 2019
 @author: parveen
 """
 
-from xception import Xception
+from os.path import join
+from os.path import dirname
+from keras.models import load_model
 from keras.preprocessing import image
 from imagenet_utils import preprocess_input, decode_predictions
 import numpy as np
 
-model = Xception(weights='imagenet')
+# Meta information
+suffix = '_Xception'
+Service = 'ServiceImage'
+ProjHome = 'T:/AI-Product/_Service'
+ImagePath = join(dirname(ProjHome), 'zz_sampledata')
 
-img_path = 'lion.jfif'
-img = image.load_img(img_path, target_size=(299, 299))
+model = load_model(join(ProjHome, Service + suffix + '.hdf5'))
+
+# load and prepare image
+img = image.load_img(join(ImagePath, 'elephant.jpg'), target_size=(299, 299))
+#image = Image.open(img)
+
+img.show()
 x = image.img_to_array(img)
 x = np.expand_dims(x, axis=0)
 x = preprocess_input(x)
 
+# Make predictions
 preds = model.predict(x)
-print('Predicted:', decode_predictions(preds))
+print('Predicted:', decode_predictions(preds) )
