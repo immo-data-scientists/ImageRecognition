@@ -1,5 +1,5 @@
 import json
-
+import keras
 from keras import backend as K
 from os.path import join
 
@@ -45,4 +45,5 @@ def decode_predictions(preds, top=5):
         top_indices = pred.argsort()[-top:][::-1]
         for i in top_indices:
             print(CLASS_INDEX[str(i)][1:], ":", pred[i])
+            
 
