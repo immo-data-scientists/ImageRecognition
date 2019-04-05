@@ -14,7 +14,6 @@ from __future__ import print_function
 from __future__ import absolute_import
 
 import warnings
-import numpy as np
 
 from keras.models import Model
 from keras import layers
@@ -31,14 +30,19 @@ from keras.engine.topology import get_source_inputs
 from keras.utils.layer_utils import convert_all_kernels_in_model
 from keras.utils.data_utils import get_file
 from keras import backend as K
-from keras.applications.imagenet_utils import decode_predictions
 from keras.applications.imagenet_utils import _obtain_input_shape
-from keras.preprocessing import image
+from os.path import join
+from os.path import dirname
 
+# Data Path
 
-WEIGHTS_PATH = '10_inception_v3_weights_tf_dim_ordering_tf_kernels.h5'
-WEIGHTS_PATH_NO_TOP = '11_inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
+projHome = "T:/AI-Product/ImageRecognition"
 
+file_weights = 'inception_v3_weights_tf_dim_ordering_tf_kernels.h5'
+file_weights_notop = 'inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5'
+
+WEIGHTS_PATH = join(projHome, file_weights)
+WEIGHTS_PATH_NO_TOP = join(projHome, file_weights_notop)
 
 def conv2d_bn(x,
               filters,
@@ -374,14 +378,14 @@ def InceptionV3(include_top=True,
             weights_path = get_file(
                 'inception_v3_weights_tf_dim_ordering_tf_kernels.h5',
                 WEIGHTS_PATH,
-                cache_subdir='models',
-                md5_hash='9a0d58056eeedaa3f26cb7ebd46da564')
+                cache_subdir=dirname(WEIGHTS_PATH))
+#                md5_hash='9a0d58056eeedaa3f26cb7ebd46da564')
         else:
             weights_path = get_file(
                 'inception_v3_weights_tf_dim_ordering_tf_kernels_notop.h5',
                 WEIGHTS_PATH_NO_TOP,
-                cache_subdir='models',
-                md5_hash='bcbd6486424b2319ff4ef7d526e38f63')
+                cache_subdir=dirname(WEIGHTS_PATH))
+#                md5_hash='bcbd6486424b2319ff4ef7d526e38f63')
         model.load_weights(weights_path)
         if K.backend() == 'theano':
             convert_all_kernels_in_model(model)
@@ -394,16 +398,6 @@ def preprocess_input(x):
     x *= 2.
     return x
 
-
-if __name__ == '__main__':
-    model = InceptionV3(include_top=True, weights='imagenet')
-
-    img_path = 'elephant.jpg'
-    img = image.load_img(img_path, target_size=(299, 299))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-
-    x = preprocess_input(x)
-
-    preds = model.predict(x)
-    print('Predicted:', decode_predictions(preds))
+# Final model
+model = InceptionV3(weights='imagenet')
+model.save(join(dirname(projHome), '_Service/ServiceImage_InceptionV3.hdf5'))

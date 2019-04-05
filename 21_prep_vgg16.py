@@ -8,7 +8,6 @@
 '''
 from __future__ import print_function
 
-import numpy as np
 import warnings
 
 from keras.models import Model
@@ -19,18 +18,23 @@ from keras.layers import Conv2D
 from keras.layers import MaxPooling2D
 from keras.layers import GlobalMaxPooling2D
 from keras.layers import GlobalAveragePooling2D
-from keras.preprocessing import image
 from keras.utils import layer_utils
 from keras.utils.data_utils import get_file
 from keras import backend as K
-from keras.applications.imagenet_utils import decode_predictions
-from keras.applications.imagenet_utils import preprocess_input
 from keras.applications.imagenet_utils import _obtain_input_shape
 from keras.engine.topology import get_source_inputs
+from os.path import join
+from os.path import dirname
 
+# Data Path
 
-WEIGHTS_PATH = '14_vgg16_weights_tf_dim_ordering_tf_kernels.h5'
-WEIGHTS_PATH_NO_TOP = '15_vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
+projHome = "T:/AI-Product/ImageRecognition"
+
+file_weights = 'vgg16_weights_tf_dim_ordering_tf_kernels.h5'
+file_weights_notop = 'vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5'
+
+WEIGHTS_PATH = join(projHome, file_weights)
+WEIGHTS_PATH_NO_TOP = join(projHome, file_weights_notop)
 
 
 def VGG16(include_top=True, weights='imagenet',
@@ -162,11 +166,13 @@ def VGG16(include_top=True, weights='imagenet',
         if include_top:
             weights_path = get_file('vgg16_weights_tf_dim_ordering_tf_kernels.h5',
                                     WEIGHTS_PATH,
-                                    cache_subdir='models')
+                                    #cache_subdir='models')
+                                    cache_subdir=dirname(WEIGHTS_PATH))
         else:
             weights_path = get_file('vgg16_weights_tf_dim_ordering_tf_kernels_notop.h5',
                                     WEIGHTS_PATH_NO_TOP,
-                                    cache_subdir='models')
+                                    #cache_subdir='models')
+                                    cache_subdir=dirname(WEIGHTS_PATH_NO_TOP))
         model.load_weights(weights_path)
         if K.backend() == 'theano':
             layer_utils.convert_all_kernels_in_model(model)
@@ -190,15 +196,6 @@ def VGG16(include_top=True, weights='imagenet',
     return model
 
 
-if __name__ == '__main__':
-    model = VGG16(include_top=True, weights='imagenet')
-
-    img_path = 'elephant.jpg'
-    img = image.load_img(img_path, target_size=(224, 224))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    print('Input image shape:', x.shape)
-
-    preds = model.predict(x)
-    print('Predicted:', decode_predictions(preds))
+# Final model
+model = VGG16(weights='imagenet')
+model.save(join(dirname(projHome), '_Service/ServiceImage_vgg16.hdf5'))
