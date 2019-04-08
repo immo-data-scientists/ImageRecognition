@@ -265,12 +265,6 @@ def Xception(include_top=True, weights='imagenet',
     return model
 
 
-def preprocess_input(x):
-    x /= 255.
-    x -= 0.5
-    x *= 2.
-    return x
-
 # Final model
 model = Xception(weights='imagenet')
 model.save(join(dirname(projHome), '_Service/ServiceImage_Xception.hdf5'))

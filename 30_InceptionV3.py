@@ -28,7 +28,6 @@ model = load_model(join(ProjHome, Service + suffix + '.hdf5'))
 
 #model = InceptionV3(weights='imagenet')
 
-
 # load and prepare image
 img = image.load_img(join(ImagePath, 'elephant.jpg'), target_size=(299, 299))
 #image = Image.open(img)

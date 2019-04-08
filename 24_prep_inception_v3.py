@@ -391,13 +391,6 @@ def InceptionV3(include_top=True,
             convert_all_kernels_in_model(model)
     return model
 
-
-def preprocess_input(x):
-    x /= 255.
-    x -= 0.5
-    x *= 2.
-    return x
-
 # Final model
 model = InceptionV3(weights='imagenet')
 model.save(join(dirname(projHome), '_Service/ServiceImage_InceptionV3.hdf5'))
