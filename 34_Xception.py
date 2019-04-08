@@ -9,8 +9,14 @@ from os.path import join
 from os.path import dirname
 from keras.models import load_model
 from keras.preprocessing import image
-from imagenet_utils import preprocess_input, decode_predictions
+from imagenet_utils import decode_predictions
 import numpy as np
+
+def preprocess_input(x):
+    x /= 255.
+    x -= 0.5
+    x *= 2.
+    return x
 
 # Meta information
 suffix = '_Xception'

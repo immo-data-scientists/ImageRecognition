@@ -1,5 +1,4 @@
 import json
-import keras
 from keras import backend as K
 from os.path import join
 
@@ -29,7 +28,6 @@ def preprocess_input(x, dim_ordering='default'):
         # 'RGB'->'BGR'
         x = x[:, :, :, ::-1]
     return x
-
 
 def decode_predictions(preds, top=5):
     global CLASS_INDEX
