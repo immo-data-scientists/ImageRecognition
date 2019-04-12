@@ -38,7 +38,7 @@ def decode_predictions(preds, top=5):
                          'Found array with shape: ' + str(preds.shape))
     if CLASS_INDEX is None:
         CLASS_INDEX = json.load(open(CLASS_INDEX_PATH))
-#   
+    
     for pred in preds:
         top_indices = pred.argsort()[-top:][::-1]
         for i in top_indices:
